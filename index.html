@@ -45,6 +45,7 @@
     // --- AQUÍ VAS A PEGAR TUS DATOS DE SUPABASE ---
     const supabaseUrl = 'https://twnfqtuhixdxcskjiioy.supabase.co';
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR3bmZxdHVoaXhkeGNza2ppaW95Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3Mzk2NjMsImV4cCI6MjEwMjMxNTY2M30.9Urbw_-s1SyjpBLR9O7PZkcKKpvgqwGO-GhW4a0y8Zs';
+    const resendKey = window.RESEND_KEY;
     // ----------------------------------------------
 
     async function enviarDatos(event) {
@@ -69,6 +70,41 @@
             });
 
             if(response.ok) {
+            // 1. Enviar el correo automático usando Resend
+            try {
+                await fetch('https://api.resend.com/emails', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${resendKey}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        from: 'Acme ', // Resend requiere este correo de prueba por ahora
+                        to: email, // El correo que el usuario escribió en el formulario
+                        subject: '🌸 ¡Bienvenida a SCENTIA, ' + nombre + '!',
+                        html: `
+                            
+                                SCENTIA
+                                El arte de lo esencial
+                                
+                                ¡Hola ${nombre}!
+                                Gracias por unirte a nuestra comunidad. Nos emociona que estés a punto de revelar tu verdadera esencia.
+                                Como regalo de bienvenida, aquí tienes un código de 20% de descuento para tu primera compra:
+                                
+                                    ESENCIA20
+                                
+                                IR A LA TIENDA
+                            
+                        `
+                    })
+                });
+            } catch(e) {
+                console.log("El correo falló, pero el lead se guardó.", e);
+            }
+
+            // 2. Redirigir automáticamente a la tienda de SCENTIA
+            window.location.href = 'https://scentiamx.mitiendanube.com/';
+        } else {
                 // Redirige en automático a Tiendanube
                 window.location.href = 'https://scentiamx.mitiendanube.com/';
             } else {
