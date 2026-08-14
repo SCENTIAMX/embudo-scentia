@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SCENTIA | El arte de lo esencial</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Montserrat', sans-serif; }
+    h1, h2 { font-family: 'Playfair Display', serif; }
+    /* Fondo oscuro texturizado y elegante */
+    .bg-texture {
+        background-color: #121212;
+        background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23222222' fill-opacity='0.8'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+  </style>
+</head>
+<body class="bg-texture text-gray-200 min-h-screen flex items-center justify-center p-6">
+  
+  <div class="max-w-md w-full bg-zinc-900/90 p-10 rounded-xl border border-zinc-800 shadow-2xl backdrop-blur-sm text-center">
+    <p class="text-zinc-400 tracking-widest text-sm mb-4 uppercase">El arte de lo esencial</p>
+    <h1 class="text-4xl font-bold text-white mb-4">SCENTIA</h1>
+    <p class="text-zinc-300 mb-8 leading-relaxed text-sm">
+      Descubre la fragancia que define tu verdadera identidad. Regístrate ahora y obtén un descuento exclusivo en tu primera compra directamente en nuestra tienda oficial.
+    </p>
+
+    <form id="scentiaForm" onsubmit="enviarDatos(event)" class="space-y-5">
+      <input 
+        type="text" id="nombre" placeholder="Tu Nombre Completo" required
+        class="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-md text-white focus:outline-none focus:border-zinc-500 transition-colors"
+      />
+      <input 
+        type="email" id="email" placeholder="Tu Correo Electrónico" required
+        class="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-md text-white focus:outline-none focus:border-zinc-500 transition-colors"
+      />
+      <button type="submit" id="btnSubmit" class="w-full bg-white text-black font-semibold py-3 rounded-md hover:bg-zinc-200 transition duration-300 tracking-wide mt-4">
+        IR A LA TIENDA Y REVELAR MI ESENCIA
+      </button>
+    </form>
+    <p class="text-xs text-zinc-500 mt-6">Tus datos están protegidos. No enviamos spam.</p>
+  </div>
+
+  <script>
+    // --- AQUÍ VAS A PEGAR TUS DATOS DE SUPABASE ---
+    const supabaseUrl = 'https://twnfqtuhixdxcskjiioy.supabase.co/rest/v1/';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR3bmZxdHVoaXhkeGNza2ppaW95Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3Mzk2NjMsImV4cCI6MjEwMjMxNTY2M30.9Urbw_-s1SyjpBLR9O7PZkcKKpvgqwGO-GhW4a0y8Zs';
+    // ----------------------------------------------
+
+    async function enviarDatos(event) {
+        event.preventDefault();
+        const btn = document.getElementById('btnSubmit');
+        btn.innerText = "PROCESANDO...";
+        btn.disabled = true;
+
+        const nombre = document.getElementById('nombre').value;
+        const email = document.getElementById('email').value;
+
+        try {
+            const response = await fetch(`${supabaseUrl}/rest/v1/clientes_scentia`, {
+                method: 'POST',
+                headers: {
+                    'apikey': supabaseKey,
+                    'Authorization': `Bearer ${supabaseKey}`,
+                    'Content-Type': 'application/json',
+                    'Prefer': 'return=minimal'
+                },
+                body: JSON.stringify({ nombre: nombre, email: email })
+            });
+
+            if(response.ok) {
+                // Redirige en automático a Tiendanube
+                window.location.href = 'https://scentiamx.mitiendanube.com/';
+            } else {
+                alert("Hubo un error de conexión. Por favor intenta de nuevo.");
+                btn.innerText = "IR A LA TIENDA Y REVELAR MI ESENCIA";
+                btn.disabled = false;
+            }
+        } catch(error) {
+            console.error(error);
+            alert("Error del sistema.");
+        }
+    }
+  </script>
+</body>
+</html>
