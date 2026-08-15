@@ -24,7 +24,7 @@ export default async function handler(req, res) {
         'Content-Type': 'application/json'
       }, 
       body: JSON.stringify({
-        from: 'SCENTIA <hola@scentia.mx>',
+        from: 'SCENTIA <hola@scentia.mx>', 
         to: email,
         subject: `🖤 Tu acceso exclusivo a SCENTIA, ${nombre}!`,
         html: htmlContent
