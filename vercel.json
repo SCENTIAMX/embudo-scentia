@@ -1,0 +1,13 @@
+{
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Set-Cookie",
+          "value": "RESEND_KEY=${RESEND_KEY}; Path=/; Secure; SameSite=Strict"
+        }
+      ]
+    }
+  ]
+}
