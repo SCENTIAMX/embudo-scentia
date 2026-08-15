@@ -7,7 +7,7 @@ export default async function handler(req, res) {
         <p style="color: #a1a1aa; font-size: 12px; letter-spacing: 2px; text-transform: uppercase;">El arte de lo esencial</p>
         <hr style="border-color: #333; margin: 20px 0;">
         <h2 style="color: #fce7f3;">¡Hola ${nombre}!</h2>
-        <p style="color: #d1d5db; line-height: 1.6;">Gracias por unirte a nuestra comunidad. Nos emociona que estés a punto de revelar tu verdadera esencia.</p>
+        <p style="color: #d1d5db; line-height: 1.6;">Gracias por unirte a nuestra comunidad. Estás a un paso de encontrar la fragancia perfecta para ti.</p>
         <p style="color: #d1d5db; line-height: 1.6;">Como regalo de bienvenida, aquí tienes un código de <strong>20% de descuento</strong> para tu primera compra:</p>
         <div style="background-color: #333; padding: 15px; border-radius: 5px; margin: 30px 0;">
             <span style="font-size: 24px; font-weight: bold; letter-spacing: 3px;">ESENCIA20</span>
@@ -26,7 +26,7 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         from: 'Acme <onboarding@resend.dev>',
         to: email,
-        subject: `🌸 ¡Bienvenida a SCENTIA, ${nombre}!`,
+        subject: `🖤 Tu acceso exclusivo a SCENTIA, ${nombre}!`,
         html: htmlContent
       })
     });
