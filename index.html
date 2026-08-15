@@ -42,16 +42,19 @@
   </div>
 
   <script>
+    // Función para leer la contraseña segura de Resend desde Vercel
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+    
     // --- AQUÍ VAS A PEGAR TUS DATOS DE SUPABASE ---
     const supabaseUrl = 'https://twnfqtuhixdxcskjiioy.supabase.co';
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR3bmZxdHVoaXhkeGNza2ppaW95Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3Mzk2NjMsImV4cCI6MjEwMjMxNTY2M30.9Urbw_-s1SyjpBLR9O7PZkcKKpvgqwGO-GhW4a0y8Zs';
-    function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
-}
-const resendKey = getCookie('RESEND_KEY');
     // ----------------------------------------------
+    
+    const resendKey = getCookie('RESEND_KEY');
 
     async function enviarDatos(event) {
         event.preventDefault();
@@ -63,6 +66,7 @@ const resendKey = getCookie('RESEND_KEY');
         const email = document.getElementById('email').value;
 
         try {
+            // 1. Guardar en Base de Datos
             const response = await fetch(`${supabaseUrl}/rest/v1/clientes_scentia`, {
                 method: 'POST',
                 headers: {
@@ -75,51 +79,50 @@ const resendKey = getCookie('RESEND_KEY');
             });
 
             if(response.ok) {
-            // 1. Enviar el correo automático usando Resend
-            try {
-                await fetch('https://api.resend.com/emails', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${resendKey}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        from: 'Acme ', // Resend requiere este correo de prueba por ahora
-                        to: email, // El correo que el usuario escribió en el formulario
-                        subject: '🌸 ¡Bienvenida a SCENTIA, ' + nombre + '!',
-                        html: `
-                            
-                                SCENTIA
-                                El arte de lo esencial
-                                
-                                ¡Hola ${nombre}!
-                                Gracias por unirte a nuestra comunidad. Nos emociona que estés a punto de revelar tu verdadera esencia.
-                                Como regalo de bienvenida, aquí tienes un código de 20% de descuento para tu primera compra:
-                                
-                                    ESENCIA20
-                                
-                                IR A LA TIENDA
-                            
-                        `
-                    })
-                });
-            } catch(e) {
-                console.log("El correo falló, pero el lead se guardó.", e);
-            }
+                // 2. Enviar el correo automático usando Resend
+                try {
+                    await fetch('https://api.resend.com/emails', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${resendKey}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            from: 'Acme <onboarding@resend.dev>',
+                            to: email,
+                            subject: '🌸 ¡Bienvenida a SCENTIA, ' + nombre + '!',
+                            html: `
+                                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #1a1a1a; color: white; padding: 40px; border-radius: 10px; text-align: center;">
+                                    <h1 style="color: #ffffff; font-family: 'Playfair Display', serif;">SCENTIA</h1>
+                                    <p style="color: #a1a1aa; font-size: 12px; letter-spacing: 2px; text-transform: uppercase;">El arte de lo esencial</p>
+                                    <hr style="border-color: #333; margin: 20px 0;">
+                                    <h2 style="color: #fce7f3;">¡Hola ${nombre}!</h2>
+                                    <p style="color: #d1d5db; line-height: 1.6;">Gracias por unirte a nuestra comunidad. Nos emociona que estés a punto de revelar tu verdadera esencia.</p>
+                                    <p style="color: #d1d5db; line-height: 1.6;">Como regalo de bienvenida, aquí tienes un código de <strong>20% de descuento</strong> para tu primera compra:</p>
+                                    <div style="background-color: #333; padding: 15px; border-radius: 5px; margin: 30px 0;">
+                                        <span style="font-size: 24px; font-weight: bold; letter-spacing: 3px;">ESENCIA20</span>
+                                    </div>
+                                    <a href="https://scentiamx.mitiendanube.com/" style="background-color: #ffffff; color: #000000; padding: 12px 30px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">IR A LA TIENDA</a>
+                                </div>
+                            `
+                        })
+                    });
+                } catch(e) {
+                    console.log("El correo falló, pero el lead se guardó.", e);
+                }
 
-            // 2. Redirigir automáticamente a la tienda de SCENTIA
-            window.location.href = 'https://scentiamx.mitiendanube.com/';
-        } else {
-                // Redirige en automático a Tiendanube
+                // 3. Redirigir automáticamente a la tienda de SCENTIA
                 window.location.href = 'https://scentiamx.mitiendanube.com/';
             } else {
-                alert("Hubo un error de conexión. Por favor intenta de nuevo.");
+                alert("Hubo un error de conexión con la base de datos.");
                 btn.innerText = "IR A LA TIENDA Y REVELAR MI ESENCIA";
                 btn.disabled = false;
             }
         } catch(error) {
             console.error(error);
             alert("Error del sistema.");
+            btn.innerText = "IR A LA TIENDA Y REVELAR MI ESENCIA";
+            btn.disabled = false;
         }
     }
   </script>
