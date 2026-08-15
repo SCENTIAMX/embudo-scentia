@@ -45,7 +45,12 @@
     // --- AQUÍ VAS A PEGAR TUS DATOS DE SUPABASE ---
     const supabaseUrl = 'https://twnfqtuhixdxcskjiioy.supabase.co';
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR3bmZxdHVoaXhkeGNza2ppaW95Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3Mzk2NjMsImV4cCI6MjEwMjMxNTY2M30.9Urbw_-s1SyjpBLR9O7PZkcKKpvgqwGO-GhW4a0y8Zs';
-    const resendKey = window.RESEND_KEY;
+    function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
+const resendKey = getCookie('RESEND_KEY');
     // ----------------------------------------------
 
     async function enviarDatos(event) {
