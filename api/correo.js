@@ -12,7 +12,7 @@ export default async function handler(req, res) {
         <div style="background-color: #333; padding: 15px; border-radius: 5px; margin: 30px 0;">
             <span style="font-size: 24px; font-weight: bold; letter-spacing: 3px;">ESENCIA20</span>
         </div>
-        <a href="[https://scentia.mx/](https://scentia.mx/)" style="background-color: #ffffff; color: #000000; padding: 12px 30px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">IR A LA TIENDA</a>
+        <a href="[https://scentia.mx](https://scentia.mx)" style="background-color: #ffffff; color: #000000; padding: 12px 30px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">IR A LA TIENDA</a>
     </div>
   `;
 
